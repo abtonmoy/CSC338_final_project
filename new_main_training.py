@@ -16,7 +16,9 @@ An intracranial aneurysm is a bulging or ballooning in a blood vessel in the bra
 Early detection is crucial as rupture can lead to hemorrhagic stroke. MRA imaging 
 is a non-invasive technique to visualize brain vasculature.
 """
-
+# import os
+# os.environ['TF_XLA_FLAGS'] = '--tf_xla_auto_jit=0'
+# os.environ['XLA_FLAGS'] = '--xla_gpu_cuda_data_dir=/usr/local/cuda'
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -319,33 +321,33 @@ print("- Model Checkpoint (save best val_auc)")
 # SECTION 7: INITIAL TRAINING (TEST RUN)
 # ============================================================================
 
-print("\n" + "="*70)
-print("RUNNING INITIAL TEST EPOCHS")
-print("="*70)
-print("Training for 2 epochs to verify architecture is learning...")
+# print("\n" + "="*70)
+# print("RUNNING INITIAL TEST EPOCHS")
+# print("="*70)
+# print("Training for 2 epochs to verify architecture is learning...")
 
-# Train for just 2 epochs to verify everything works
-history = model.fit(
-    x_train_norm, y_train_flat,
-    batch_size=16,
-    epochs=2,
-    validation_data=(x_val_norm, y_val_flat),
-    class_weight=class_weight,
-    verbose=1
-)
+# # Train for just 2 epochs to verify everything works
+# history = model.fit(
+#     x_train_norm, y_train_flat,
+#     batch_size=16,
+#     epochs=2,
+#     validation_data=(x_val_norm, y_val_flat),
+#     class_weight=class_weight,
+#     verbose=1
+# )
 
-print("\nInitial test complete!")
-print(f"Training Loss: {history.history['loss'][-1]:.4f}")
-print(f"Training AUC: {history.history['auc'][-1]:.4f}")
-print(f"Validation Loss: {history.history['val_loss'][-1]:.4f}")
-print(f"Validation AUC: {history.history['val_auc'][-1]:.4f}")
+# print("\nInitial test complete!")
+# print(f"Training Loss: {history.history['loss'][-1]:.4f}")
+# print(f"Training AUC: {history.history['auc'][-1]:.4f}")
+# print(f"Validation Loss: {history.history['val_loss'][-1]:.4f}")
+# print(f"Validation AUC: {history.history['val_auc'][-1]:.4f}")
 
 # ============================================================================
 # SECTION 8: FULL TRAINING (FOR GPU)
 # ============================================================================
 
-"""
-UNCOMMENT THE FOLLOWING SECTION FOR FULL TRAINING ON GPU
+
+
 
 # Full training configuration
 epochs = 100  # Will likely stop early due to early stopping
@@ -445,16 +447,4 @@ print("- ResNet18 (3D) baseline: AUC ~0.920, ACC ~0.890")
 print("- Your model's performance will be compared here")
 print(f"- Your model AUC: {test_auc:.4f}")
 print(f"- Your model ACC: {test_acc:.4f}")
-"""
 
-print("\n" + "="*70)
-print("MILESTONE 2 COMPLETE")
-print("="*70)
-print("✓ Dataset loaded and explored")
-print("✓ Neural network architecture designed")
-print("✓ Model compiled with appropriate loss function")
-print("✓ Initial test epochs completed successfully")
-print("\nNext Steps:")
-print("1. Run full training on GPU system (uncomment Section 8)")
-print("2. Evaluate against MedMNIST benchmarks")
-print("3. Consider ethical implications for presentation")
