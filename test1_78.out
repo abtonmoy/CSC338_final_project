@@ -1,0 +1,212 @@
+/var/spool/slurmd/job00078/slurm_script: line 8: /home/atonmoy27/micromamba/envs/tfenv/bin/activate: No such file or directory
+[NbConvertApp] Converting notebook new_main.ipynb to notebook
+[IPKernelApp] WARNING | debugpy_stream undefined, debugging will not be enabled
+2025-12-12 12:01:26.136499: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2025-12-12 12:01:26.166718: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2025-12-12 12:01:26.167244: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-12-12 12:01:26.840390: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+Traceback (most recent call last):
+  File "/usr/bin/jupyter-nbconvert", line 33, in <module>
+    sys.exit(load_entry_point('nbconvert==6.4.0', 'console_scripts', 'jupyter-nbconvert')())
+  File "/usr/lib/python3/dist-packages/jupyter_core/application.py", line 264, in launch_instance
+    return super(JupyterApp, cls).launch_instance(argv=argv, **kwargs)
+  File "/usr/lib/python3/dist-packages/traitlets/config/application.py", line 846, in launch_instance
+    app.start()
+  File "/usr/lib/python3/dist-packages/nbconvert/nbconvertapp.py", line 361, in start
+    self.convert_notebooks()
+  File "/usr/lib/python3/dist-packages/nbconvert/nbconvertapp.py", line 533, in convert_notebooks
+    self.convert_single_notebook(notebook_filename)
+  File "/usr/lib/python3/dist-packages/nbconvert/nbconvertapp.py", line 498, in convert_single_notebook
+    output, resources = self.export_single_notebook(notebook_filename, resources, input_buffer=input_buffer)
+  File "/usr/lib/python3/dist-packages/nbconvert/nbconvertapp.py", line 427, in export_single_notebook
+    output, resources = self.exporter.from_filename(notebook_filename, resources=resources)
+  File "/usr/lib/python3/dist-packages/nbconvert/exporters/exporter.py", line 190, in from_filename
+    return self.from_file(f, resources=resources, **kw)
+  File "/usr/lib/python3/dist-packages/nbconvert/exporters/exporter.py", line 208, in from_file
+    return self.from_notebook_node(nbformat.read(file_stream, as_version=4), resources=resources, **kw)
+  File "/usr/lib/python3/dist-packages/nbconvert/exporters/notebook.py", line 32, in from_notebook_node
+    nb_copy, resources = super().from_notebook_node(nb, resources, **kw)
+  File "/usr/lib/python3/dist-packages/nbconvert/exporters/exporter.py", line 147, in from_notebook_node
+    nb_copy, resources = self._preprocess(nb_copy, resources)
+  File "/usr/lib/python3/dist-packages/nbconvert/exporters/exporter.py", line 334, in _preprocess
+    nbc, resc = preprocessor(nbc, resc)
+  File "/usr/lib/python3/dist-packages/nbconvert/preprocessors/base.py", line 47, in __call__
+    return self.preprocess(nb, resources)
+  File "/usr/lib/python3/dist-packages/nbconvert/preprocessors/execute.py", line 84, in preprocess
+    self.preprocess_cell(cell, resources, index)
+  File "/usr/lib/python3/dist-packages/nbconvert/preprocessors/execute.py", line 105, in preprocess_cell
+    cell = self.execute_cell(cell, index, store_history=True)
+  File "/usr/lib/python3/dist-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/usr/lib/python3/dist-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/usr/lib/python3/dist-packages/nbclient/client.py", line 854, in async_execute_cell
+    self._check_raise_for_error(cell, exec_reply)
+  File "/usr/lib/python3/dist-packages/nbclient/client.py", line 756, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# Cell 1: Imports and setup (MODIFIED - Flexible GPU selection)
+import os
+import tensorflow as tf
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
+from matplotlib import colors
+from matplotlib.widgets import Slider
+import matplotlib
+import matplotlib.font_manager
+from medmnist import VesselMNIST3D
+from tensorflow import keras
+from tensorflow.keras.utils import plot_model
+from tensorflow.keras import layers, models
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score, roc_curve
+import seaborn as sns
+
+np.random.seed(42)
+tf.random.set_seed(42)
+
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    try:
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+        
+        print(f"Found {len(gpus)} GPU(s)")
+        for i, gpu in enumerate(gpus):
+            print(f"  GPU {i}: {gpu}")
+        
+        print("\nAttempting to use all available GPUs with memory growth enabled")
+        
+    except RuntimeError as e:
+        print(f"GPU configuration error: {e}")
+else:
+    print("No GPUs found, using CPU")
+
+print("\nTensorFlow version:", tf.__version__)
+print("Available devices:", tf.config.list_physical_devices())
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mRuntimeError[0m                              Traceback (most recent call last)
+[0;32m/tmp/ipykernel_134342/1543564786.py[0m in [0;36m<module>[0;34m[0m
+[1;32m      1[0m [0;31m# Cell 1: Imports and setup (MODIFIED - Flexible GPU selection)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      2[0m [0;32mimport[0m [0mos[0m[0;34m[0m[0;34m[0m[0m
+[0;32m----> 3[0;31m [0;32mimport[0m [0mtensorflow[0m [0;32mas[0m [0mtf[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      4[0m [0;32mimport[0m [0mmatplotlib[0m[0;34m.[0m[0mpyplot[0m [0;32mas[0m [0mplt[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      5[0m [0;32mfrom[0m [0mmpl_toolkits[0m[0;34m.[0m[0mmplot3d[0m [0;32mimport[0m [0mAxes3D[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/tensorflow/__init__.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     49[0m [0;32mfrom[0m [0;34m.[0m[0m_api[0m[0;34m.[0m[0mv2[0m [0;32mimport[0m [0mautograph[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     50[0m [0;32mfrom[0m [0;34m.[0m[0m_api[0m[0;34m.[0m[0mv2[0m [0;32mimport[0m [0mbitwise[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 51[0;31m [0;32mfrom[0m [0;34m.[0m[0m_api[0m[0;34m.[0m[0mv2[0m [0;32mimport[0m [0mcompat[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     52[0m [0;32mfrom[0m [0;34m.[0m[0m_api[0m[0;34m.[0m[0mv2[0m [0;32mimport[0m [0mconfig[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     53[0m [0;32mfrom[0m [0;34m.[0m[0m_api[0m[0;34m.[0m[0mv2[0m [0;32mimport[0m [0mdata[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/tensorflow/_api/v2/compat/__init__.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     35[0m [0;32mimport[0m [0msys[0m [0;32mas[0m [0m_sys[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     36[0m [0;34m[0m[0m
+[0;32m---> 37[0;31m [0;32mfrom[0m [0;34m.[0m [0;32mimport[0m [0mv1[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     38[0m [0;32mfrom[0m [0;34m.[0m [0;32mimport[0m [0mv2[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     39[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mpython[0m[0;34m.[0m[0mcompat[0m[0;34m.[0m[0mcompat[0m [0;32mimport[0m [0mforward_compatibility_horizon[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/tensorflow/_api/v2/compat/v1/__init__.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     29[0m [0;32mfrom[0m [0;34m.[0m [0;32mimport[0m [0mautograph[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     30[0m [0;32mfrom[0m [0;34m.[0m [0;32mimport[0m [0mbitwise[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 31[0;31m [0;32mfrom[0m [0;34m.[0m [0;32mimport[0m [0mcompat[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     32[0m [0;32mfrom[0m [0;34m.[0m [0;32mimport[0m [0mconfig[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     33[0m [0;32mfrom[0m [0;34m.[0m [0;32mimport[0m [0mdata[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/tensorflow/_api/v2/compat/v1/compat/__init__.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     35[0m [0;32mimport[0m [0msys[0m [0;32mas[0m [0m_sys[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     36[0m [0;34m[0m[0m
+[0;32m---> 37[0;31m [0;32mfrom[0m [0;34m.[0m [0;32mimport[0m [0mv1[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     38[0m [0;32mfrom[0m [0;34m.[0m [0;32mimport[0m [0mv2[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     39[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mpython[0m[0;34m.[0m[0mcompat[0m[0;34m.[0m[0mcompat[0m [0;32mimport[0m [0mforward_compatibility_horizon[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/tensorflow/_api/v2/compat/v1/compat/v1/__init__.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     46[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0m_api[0m[0;34m.[0m[0mv2[0m[0;34m.[0m[0mcompat[0m[0;34m.[0m[0mv1[0m [0;32mimport[0m [0mlayers[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     47[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0m_api[0m[0;34m.[0m[0mv2[0m[0;34m.[0m[0mcompat[0m[0;34m.[0m[0mv1[0m [0;32mimport[0m [0mlinalg[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 48[0;31m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0m_api[0m[0;34m.[0m[0mv2[0m[0;34m.[0m[0mcompat[0m[0;34m.[0m[0mv1[0m [0;32mimport[0m [0mlite[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     49[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0m_api[0m[0;34m.[0m[0mv2[0m[0;34m.[0m[0mcompat[0m[0;34m.[0m[0mv1[0m [0;32mimport[0m [0mlogging[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     50[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0m_api[0m[0;34m.[0m[0mv2[0m[0;34m.[0m[0mcompat[0m[0;34m.[0m[0mv1[0m [0;32mimport[0m [0mlookup[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/tensorflow/_api/v2/compat/v1/lite/__init__.py[0m in [0;36m<module>[0;34m[0m
+[1;32m      7[0m [0;34m[0m[0m
+[1;32m      8[0m [0;32mfrom[0m [0;34m.[0m [0;32mimport[0m [0mconstants[0m[0;34m[0m[0;34m[0m[0m
+[0;32m----> 9[0;31m [0;32mfrom[0m [0;34m.[0m [0;32mimport[0m [0mexperimental[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     10[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mlite[0m[0;34m.[0m[0mpython[0m[0;34m.[0m[0mlite[0m [0;32mimport[0m [0mInterpreter[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     11[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mlite[0m[0;34m.[0m[0mpython[0m[0;34m.[0m[0mlite[0m [0;32mimport[0m [0mOpHint[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/tensorflow/_api/v2/compat/v1/lite/experimental/__init__.py[0m in [0;36m<module>[0;34m[0m
+[1;32m      6[0m [0;32mimport[0m [0msys[0m [0;32mas[0m [0m_sys[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      7[0m [0;34m[0m[0m
+[0;32m----> 8[0;31m [0;32mfrom[0m [0;34m.[0m [0;32mimport[0m [0mauthoring[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      9[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mlite[0m[0;34m.[0m[0mpython[0m[0;34m.[0m[0manalyzer[0m [0;32mimport[0m [0mModelAnalyzer[0m [0;32mas[0m [0mAnalyzer[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     10[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mlite[0m[0;34m.[0m[0mpython[0m[0;34m.[0m[0mlite[0m [0;32mimport[0m [0mOpResolverType[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/tensorflow/_api/v2/compat/v1/lite/experimental/authoring/__init__.py[0m in [0;36m<module>[0;34m[0m
+[1;32m      6[0m [0;32mimport[0m [0msys[0m [0;32mas[0m [0m_sys[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      7[0m [0;34m[0m[0m
+[0;32m----> 8[0;31m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mlite[0m[0;34m.[0m[0mpython[0m[0;34m.[0m[0mauthoring[0m[0;34m.[0m[0mauthoring[0m [0;32mimport[0m [0mcompatible[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/usr/local/lib/python3.10/dist-packages/tensorflow/lite/python/authoring/authoring.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     41[0m [0;34m[0m[0m
+[1;32m     42[0m [0;31m# pylint: disable=g-import-not-at-top[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 43[0;31m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mlite[0m[0;34m.[0m[0mpython[0m [0;32mimport[0m [0mconvert[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     44[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mlite[0m[0;34m.[0m[0mpython[0m [0;32mimport[0m [0mlite[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     45[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mlite[0m[0;34m.[0m[0mpython[0m[0;34m.[0m[0mmetrics[0m [0;32mimport[0m [0mconverter_error_data_pb2[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/tensorflow/lite/python/convert.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     25[0m [0;34m[0m[0m
+[1;32m     26[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mlite[0m[0;34m.[0m[0mpython[0m [0;32mimport[0m [0mlite_constants[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 27[0;31m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mlite[0m[0;34m.[0m[0mpython[0m [0;32mimport[0m [0mutil[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     28[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mlite[0m[0;34m.[0m[0mpython[0m [0;32mimport[0m [0mwrap_toco[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     29[0m [0;32mfrom[0m [0mtensorflow[0m[0;34m.[0m[0mlite[0m[0;34m.[0m[0mpython[0m[0;34m.[0m[0mconvert_phase[0m [0;32mimport[0m [0mComponent[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/tensorflow/lite/python/util.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     50[0m [0;31m# pylint: disable=unused-import[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     51[0m [0;32mtry[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 52[0;31m   [0;32mfrom[0m [0mjax[0m [0;32mimport[0m [0mxla_computation[0m [0;32mas[0m [0m_xla_computation[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     53[0m [0;32mexcept[0m [0mImportError[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     54[0m   [0m_xla_computation[0m [0;34m=[0m [0;32mNone[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/jax/__init__.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     33[0m [0;31m# We want the exported object to be the class, so we first import the module[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     34[0m [0;31m# to make sure a later import doesn't overwrite the class.[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 35[0;31m [0;32mfrom[0m [0mjax[0m [0;32mimport[0m [0mconfig[0m [0;32mas[0m [0m_config_module[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     36[0m [0;32mdel[0m [0m_config_module[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     37[0m [0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/jax/config.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     15[0m [0;31m# TODO(phawkins): fix users of this alias and delete this file.[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     16[0m [0;34m[0m[0m
+[0;32m---> 17[0;31m [0;32mfrom[0m [0mjax[0m[0;34m.[0m[0m_src[0m[0;34m.[0m[0mconfig[0m [0;32mimport[0m [0mconfig[0m  [0;31m# noqa: F401[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/usr/local/lib/python3.10/dist-packages/jax/_src/config.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     22[0m [0;32mfrom[0m [0mtyping[0m [0;32mimport[0m [0mAny[0m[0;34m,[0m [0mList[0m[0;34m,[0m [0mCallable[0m[0;34m,[0m [0mHashable[0m[0;34m,[0m [0mNamedTuple[0m[0;34m,[0m [0mIterator[0m[0;34m,[0m [0mOptional[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m [0;34m[0m[0m
+[0;32m---> 24[0;31m [0;32mfrom[0m [0mjax[0m[0;34m.[0m[0m_src[0m [0;32mimport[0m [0mlib[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m [0;32mfrom[0m [0mjax[0m[0;34m.[0m[0m_src[0m[0;34m.[0m[0mlib[0m [0;32mimport[0m [0mjax_jit[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m [0;32mfrom[0m [0mjax[0m[0;34m.[0m[0m_src[0m[0;34m.[0m[0mlib[0m [0;32mimport[0m [0mtransfer_guard_lib[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/jax/_src/lib/__init__.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     71[0m [0;34m[0m[0m
+[1;32m     72[0m [0mversion_str[0m [0;34m=[0m [0mjaxlib[0m[0;34m.[0m[0mversion[0m[0;34m.[0m[0m__version__[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 73[0;31m version = check_jaxlib_version(
+[0m[1;32m     74[0m   [0mjax_version[0m[0;34m=[0m[0mjax[0m[0;34m.[0m[0mversion[0m[0;34m.[0m[0m__version__[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     75[0m   [0mjaxlib_version[0m[0;34m=[0m[0mjaxlib[0m[0;34m.[0m[0mversion[0m[0;34m.[0m[0m__version__[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.10/dist-packages/jax/_src/lib/__init__.py[0m in [0;36mcheck_jaxlib_version[0;34m(jax_version, jaxlib_version, minimum_jaxlib_version)[0m
+[1;32m     66[0m            [0;34mf'incompatible with jax version {jax_version}. Please '[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     67[0m            'update your jax and/or jaxlib packages.')
+[0;32m---> 68[0;31m     [0;32mraise[0m [0mRuntimeError[0m[0;34m([0m[0mmsg[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     69[0m [0;34m[0m[0m
+[1;32m     70[0m   [0;32mreturn[0m [0m_jaxlib_version[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mRuntimeError[0m: jaxlib version 0.4.14 is newer than and incompatible with jax version 0.4.10. Please update your jax and/or jaxlib packages.
+RuntimeError: jaxlib version 0.4.14 is newer than and incompatible with jax version 0.4.10. Please update your jax and/or jaxlib packages.
+

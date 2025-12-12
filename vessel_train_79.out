@@ -1,0 +1,86 @@
+[NbClientApp] Executing new_main.ipynb
+[NbClientApp] Executing notebook with kernel: python3
+2025-12-12 12:10:21.723638: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Traceback (most recent call last):
+  File "/home/jhub/jhub-venv/bin/jupyter-execute", line 7, in <module>
+    sys.exit(main())
+  File "/home/jhub/jhub-venv/lib/python3.10/site-packages/jupyter_core/application.py", line 284, in launch_instance
+    super().launch_instance(argv=argv, **kwargs)
+  File "/home/jhub/jhub-venv/lib/python3.10/site-packages/traitlets/config/application.py", line 1074, in launch_instance
+    app.initialize(argv)
+  File "/home/jhub/jhub-venv/lib/python3.10/site-packages/traitlets/config/application.py", line 118, in inner
+    return method(app, *args, **kwargs)
+  File "/home/jhub/jhub-venv/lib/python3.10/site-packages/nbclient/cli.py", line 161, in initialize
+    self.run_notebook(path)
+  File "/home/jhub/jhub-venv/lib/python3.10/site-packages/nbclient/cli.py", line 215, in run_notebook
+    client.execute()
+  File "/home/jhub/jhub-venv/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/jhub/jhub-venv/lib/python3.10/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+  File "/home/jhub/jhub-venv/lib/python3.10/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/jhub/jhub-venv/lib/python3.10/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# Cell 1: Imports and setup (MODIFIED - Flexible GPU selection)
+import os
+import tensorflow as tf
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
+from matplotlib import colors
+from matplotlib.widgets import Slider
+import matplotlib
+import matplotlib.font_manager
+from medmnist import VesselMNIST3D
+from tensorflow import keras
+from tensorflow.keras.utils import plot_model
+from tensorflow.keras import layers, models
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score, roc_curve
+import seaborn as sns
+
+np.random.seed(42)
+tf.random.set_seed(42)
+
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    try:
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+        
+        print(f"Found {len(gpus)} GPU(s)")
+        for i, gpu in enumerate(gpus):
+            print(f"  GPU {i}: {gpu}")
+        
+        print("\nAttempting to use all available GPUs with memory growth enabled")
+        
+    except RuntimeError as e:
+        print(f"GPU configuration error: {e}")
+else:
+    print("No GPUs found, using CPU")
+
+print("\nTensorFlow version:", tf.__version__)
+print("Available devices:", tf.config.list_physical_devices())
+------------------
+
+----- stderr -----
+2025-12-12 12:10:21.723638: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+Cell [0;32mIn[1], line 16[0m
+[1;32m     14[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mtensorflow[39;00m[38;5;21;01m.[39;00m[38;5;21;01mkeras[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m layers, models
+[1;32m     15[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mmetrics[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m classification_report, confusion_matrix, roc_auc_score, roc_curve
+[0;32m---> 16[0m [38;5;28;01mimport[39;00m[38;5;250m [39m[38;5;21;01mseaborn[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[38;5;21;01msns[39;00m
+[1;32m     18[0m np[38;5;241m.[39mrandom[38;5;241m.[39mseed([38;5;241m42[39m)
+[1;32m     19[0m tf[38;5;241m.[39mrandom[38;5;241m.[39mset_seed([38;5;241m42[39m)
+
+[0;31mModuleNotFoundError[0m: No module named 'seaborn'
+
